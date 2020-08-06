@@ -1,10 +1,10 @@
 ﻿using System;
 namespace RollwayStation.Models
 {
-    public class IEngineer
+    public interface IEngineer
     {
-        public IEngineer()
-        {
-        }
+        int Penalty { get; }
+        void UseAbility();
+        bool AbilityAvailable { get; }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 namespace RollwayStation.Models
 {
-    public class ModifierEngineer
+    public class ModifierEngineer : BaseEngineer, IEngineer
     {
-        public ModifierEngineer()
-        {
-        }
+        public int Penalty => 10;
     }
 }

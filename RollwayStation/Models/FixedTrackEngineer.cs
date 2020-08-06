@@ -1,10 +1,8 @@
 ﻿using System;
 namespace RollwayStation.Models
 {
-    public class FixedTrackEngineer
+    public class FixedTrackEngineer : BaseEngineer, IEngineer
     {
-        public FixedTrackEngineer()
-        {
-        }
+        public int Penalty => 15;
     }
 }

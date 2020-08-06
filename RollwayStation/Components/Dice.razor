@@ -1,5 +1,56 @@
-﻿<h3>Component1</h3>
+﻿@inject Store store;
 
+<div class="row text-center">
+    @if (dice != null && diceInitialized)
+    {
+        foreach (var die in dice)
+        {
+            <div class="col-2">
+               <p @onclick="@(()=> SetAllocation(die))" class="@(die.Used ? "disabled" : "")" style="font-size: 10vh; color: @(die.Used ? "gray" : "blue")">@((MarkupString)$"&#{(9855 + die.Face).ToString()}")</p>
+            </div>
+
+        }
+    }
+
+</div>
+<div class="col-sm-12 col-md-6 mx-auto text-center">
+    <button class="btn btn-block btn-primary" disabled="@(diceInitialized && diceLeftToAllocate)" @onclick="RollDice">Roll Dice</button>
+</div>
 @code {
+    [Parameter]
+    public AllocationType AllocationType { get; set; }
 
+    private List<Die> dice;
+    private bool diceLeftToAllocate => dice.Any(x => !x.Used);
+    private bool diceInitialized => !dice.Any(x => x.Face <= 0);
+
+    protected override void OnInitialized()
+    {
+        dice = store.Dice;
+    }
+
+    public void RollDice()
+    {
+
+        foreach (var die in dice)
+        {
+            die.Roll();
+        }
+
+        StateHasChanged();
+    }
+
+    public void SetAllocation(Die die)
+    {
+        if (die.AllocatedTo == AllocationType)
+        {
+            die.AllocatedTo = null;
+        }
+        else if (die.AllocatedTo == null)
+        {
+            die.AllocatedTo = AllocationType;
+        }
+
+        StateHasChanged();
+    }
 }
