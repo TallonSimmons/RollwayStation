@@ -14,15 +14,20 @@
 
 </div>
 <div class="col-sm-12 col-md-6 mx-auto text-center">
-    <button class="btn btn-block btn-primary" disabled="@(diceInitialized && diceLeftToAllocate)" @onclick="RollDice">Roll Dice</button>
+    <button class="btn btn-block btn-primary" disabled="@(diceInitialized && anyUnusedDice)" @onclick="RollDice">Roll Dice</button>
 </div>
 @code {
     [Parameter]
     public AllocationType AllocationType { get; set; }
+    [Parameter]
+    public int MaxAllocations { get; set; }
+    [Parameter]
+    public EventCallback<Die> OnAllocatedEventHandler { get; set; }
 
     private List<Die> dice;
-    private bool diceLeftToAllocate => dice.Any(x => !x.Used);
+    private bool anyUnusedDice => dice.Any(x => !x.Used);
     private bool diceInitialized => !dice.Any(x => x.Face <= 0);
+    private int currentAllocations;
 
     protected override void OnInitialized()
     {
@@ -35,6 +40,7 @@
         foreach (var die in dice)
         {
             die.Roll();
+            die.AllocatedTo = null;
         }
 
         StateHasChanged();
@@ -45,10 +51,12 @@
         if (die.AllocatedTo == AllocationType)
         {
             die.AllocatedTo = null;
+            currentAllocations--;
         }
-        else if (die.AllocatedTo == null)
+        else if (die.AllocatedTo == null && currentAllocations < MaxAllocations)
         {
             die.AllocatedTo = AllocationType;
+            currentAllocations++;
         }
 
         StateHasChanged();

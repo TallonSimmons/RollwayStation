@@ -22,7 +22,7 @@ namespace RollwayStation.Tests
 
             foreach (var die in dice)
             {
-                auction.MakeBid(die);
+                auction.PlaceBid(die);
             }
 
 
@@ -51,7 +51,7 @@ namespace RollwayStation.Tests
 
             foreach (var die in dice)
             {
-                auction.MakeBid(die);
+                auction.PlaceBid(die);
             }
 
 

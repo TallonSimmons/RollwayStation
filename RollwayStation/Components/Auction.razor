@@ -1,0 +1,20 @@
+﻿@inject AuctionService auctionService;
+<Dice 
+      AllocationType="AllocationType.Bid" 
+      MaxAllocations="1" 
+      OnAllocatedEventHandler="HandleDieAllocated"></Dice>
+
+@code {
+    private Models.Auction currentAuction => auctionService.GetCurrentAuction();
+    public void HandleDieAllocated(Die die)
+    {
+        if(die.AllocatedTo == null)
+        {
+            currentAuction.WithdrawBid();
+        }
+        else
+        {
+            currentAuction.PlaceBid(die);
+        }
+    }
+}

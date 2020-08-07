@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace RollwayStation.Models
 {
     public enum CompanyType { SquareRail, CircleLine, PentagonExpress }
@@ -12,6 +14,7 @@ namespace RollwayStation.Models
         }
 
         public CompanyType CompanyType { get; }
+        public List<Train> Trains { get; } = new List<Train>();
         public int Shares
         {
             get => shares;

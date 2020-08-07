@@ -56,7 +56,7 @@ namespace RollwayStation.Models
             }
         }
 
-        public void MakeBid(Die die)
+        public void PlaceBid(Die die)
         {
             if (currentBids == MaxBids || die == null)
             {
@@ -67,6 +67,17 @@ namespace RollwayStation.Models
 
             bids.Add(new Bid(company, currentBids + 1));
             currentBids++;
+        }
+
+        public void WithdrawBid()
+        {
+            if (currentBids == 0 || !bids.Any())
+            {
+                return;
+            }
+
+            bids.Remove(bids.LastOrDefault());
+            currentBids--;
         }
     }
 }
