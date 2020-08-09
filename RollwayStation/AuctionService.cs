@@ -1,4 +1,5 @@
 ﻿using RollwayStation.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RollwayStation
@@ -14,7 +15,12 @@ namespace RollwayStation
 
         public Auction GetCurrentAuction()
         {
-            return store.Auctions.FirstOrDefault(x => x.AuctionWinner == null);
+            return store.Auctions.FirstOrDefault(x => x.BiddingRounds.Contains(store.BiddingRound));
+        }
+
+        public List<Auction> GetAuctions()
+        {
+            return store.Auctions;
         }
     }
 }

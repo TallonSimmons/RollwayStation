@@ -1,0 +1,39 @@
+﻿@inject AuctionService auctionService;
+
+<Dice AllocationType="AllocationType.Bid"
+      MaxAllocations="1"
+      OnAllocatedEventHandler="HandleDieAllocated"></Dice>
+<div class="bg-green rounded col-xs-12 col-md-6 mx-auto p-3">
+    @foreach (var auction in auctions)
+    {
+        <div class="form-inline">
+            <p class="text-light mr-1 @(CssHelper.GetCssCalcString(4,4))">
+                @auction.Train.NumberOfStopsAllowed
+            </p>
+            @for (int i = 0; i < auction.MaxBids; i++)
+            {
+                auction.Bids.TryGetElementAtIndex(i, out var bid);
+                <input type="text" class="col-2 text-center" disabled value="@(bid?.Company.CompanyAcronym())" />
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private Models.Auction currentAuction => auctionService.GetCurrentAuction();
+    private List<Models.Auction> auctions => auctionService.GetAuctions();
+
+
+    void HandleDieAllocated(Die die)
+    {
+        if (die.AllocatedTo == null)
+        {
+            currentAuction.WithdrawBid();
+        }
+        else
+        {
+            currentAuction.PlaceBid(die);
+        }
+        StateHasChanged();
+    }
+}

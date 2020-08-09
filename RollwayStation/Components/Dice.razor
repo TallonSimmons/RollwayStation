@@ -1,20 +1,28 @@
 ﻿@inject Store store;
 
-<div class="row text-center">
-    @if (dice != null && diceInitialized)
-    {
-        foreach (var die in dice)
+<div class="container text-center rounded bg-green pt-3 pb-3 mt-2 mb-2">
+    <div class="col-12 btn-group mb-1">
+        @if (dice != null && diceInitialized)
         {
-            <div class="col-2">
-               <p @onclick="@(()=> SetAllocation(die))" class="@(die.Used ? "disabled" : "")" style="font-size: 10vh; color: @(die.Used ? "gray" : "blue")">@((MarkupString)$"&#{(9855 + die.Face).ToString()}")</p>
-            </div>
+            foreach (var die in dice.OrderBy(x => x.Face))
+            {
 
+                <button @onclick="@(()=> SetAllocation(die))"
+                        class="btn bg-cream @(die.Used ? "disabled" : "")"
+                        style="font-size: calc(100% + 1vw + 1vh);">
+                    @((MarkupString)$"&#{(9855 + die.Face).ToString()}")
+                    @if (die.Used)
+                    {
+                        <i class="fas @(GetIconClass(die))"></i>
+                    }
+                </button>
+
+            }
         }
-    }
-
-</div>
-<div class="col-sm-12 col-md-6 mx-auto text-center">
-    <button class="btn btn-block btn-primary" disabled="@(diceInitialized && anyUnusedDice)" @onclick="RollDice">Roll Dice</button>
+    </div>
+    <div class="col-sm-12 col-md-6 mx-auto text-center">
+        <button class="btn btn-block bg-charcoal text-light" disabled="@(diceInitialized && anyUnusedDice)" @onclick="RollDice">Roll Dice</button>
+    </div>
 </div>
 @code {
     [Parameter]
@@ -28,13 +36,28 @@
     private bool anyUnusedDice => dice.Any(x => !x.Used);
     private bool diceInitialized => !dice.Any(x => x.Face <= 0);
     private int currentAllocations;
+    private bool anyAllocationsRemaining => currentAllocations < MaxAllocations;
+    private readonly Dictionary<AllocationType, string> allocationIconMap = new Dictionary<AllocationType, string>
+{
+        { AllocationType.Share, "fa-percentage" },
+        { AllocationType.Track, "fa-project-diagram" },
+        { AllocationType.Bid, "fa-hand-holding-usd" },
+    };
 
     protected override void OnInitialized()
     {
         dice = store.Dice;
     }
 
-    public void RollDice()
+    string GetIconClass(Die die)
+    {
+        return die.AllocatedTo.HasValue
+            && allocationIconMap.TryGetValue(die.AllocatedTo.Value, out var iconClass)
+            ? iconClass
+            : string.Empty;
+    }
+
+    void RollDice()
     {
 
         foreach (var die in dice)
@@ -46,8 +69,13 @@
         StateHasChanged();
     }
 
-    public void SetAllocation(Die die)
+    void SetAllocation(Die die)
     {
+        if (!anyAllocationsRemaining && die.AllocatedTo != AllocationType) 
+        {
+            return;
+        }
+
         if (die.AllocatedTo == AllocationType)
         {
             die.AllocatedTo = null;
@@ -58,7 +86,7 @@
             die.AllocatedTo = AllocationType;
             currentAllocations++;
         }
-
+        OnAllocatedEventHandler.InvokeAsync(die);
         StateHasChanged();
     }
 }

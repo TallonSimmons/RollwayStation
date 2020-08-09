@@ -17,11 +17,11 @@ namespace RollwayStation
 
         public readonly List<Auction> Auctions = new List<Auction>
         {
-            new Auction(new Train(2), 1),
-            new Auction(new Train(3), 3),
-            new Auction(new Train(4), 3),
-            new Auction(new Train(5), 3),
-            new Auction(new Train(6), 6),
+            new Auction(new Train(2), new List<int>{ 1 }),
+            new Auction(new Train(3), new List<int>{ 2,3,4 }),
+            new Auction(new Train(4), new List<int>{ 5,6,7 }),
+            new Auction(new Train(5), new List<int>{ 8,9,10 }),
+            new Auction(new Train(6), new List<int>{ 11,12,13,14,15 }),
         };
 
         public readonly List<Company> Companies = new List<Company>
@@ -30,5 +30,7 @@ namespace RollwayStation
             new Company(CompanyType.CircleLine),
             new Company(CompanyType.PentagonExpress),
         };
+
+        public int BiddingRound { get; set; } = 1;
     }
 }
