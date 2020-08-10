@@ -4,16 +4,14 @@
 <Dice AllocationType="AllocationType.Share"
       MaxAllocations="2"
       OnAllocatedEventHandler="OnDieAllocated"></Dice>
-@foreach (var debugMessage in debugMessages)
-{
-    @debugMessage
-}
 <div class="bg-green rounded col-xs-12 col-md-6 mx-auto p-3">
-    <SquareRailSharesComponent></SquareRailSharesComponent>
-    <CircleLineSharesComponent></CircleLineSharesComponent>
-    <PentagonExpressSharesComponent></PentagonExpressSharesComponent>
+    <h2 class="mb-2 text-light">Shares</h2>
+    <SquareRailSharesComponent @ref="squareRailSharesComponent"></SquareRailSharesComponent>
+    <CircleLineSharesComponent @ref="circleLineSharesComponent"></CircleLineSharesComponent>
+    <PentagonExpressSharesComponent @ref="pentagonExpressSharesComponent"></PentagonExpressSharesComponent>
     @if (availableShares.Any())
     {
+        <h4 class="mt-2">Purchase Options</h4>
         <div class="btn-group mx-auto mt-2">
             @foreach (var availableShare in availableShares)
             {
@@ -26,55 +24,62 @@
 </div>
 
 @code {
+    private SquareRailSharesComponent squareRailSharesComponent;
+    private CircleLineSharesComponent circleLineSharesComponent;
+    private PentagonExpressSharesComponent pentagonExpressSharesComponent;
     private List<Share> availableShares = new List<Share>();
     private Die dieOne;
     private Die dieTwo;
-    private List<string> debugMessages = new List<string>();
 
     void OnDieAllocated(Die die)
     {
         var deallocatedDie = false;
-        if (die.Id == dieOne.Id)
+        if (die.Id == dieOne?.Id)
         {
             dieOne = null;
             deallocatedDie = true;
-            debugMessages.Add("deallocating die one");
         }
-        else if (die.Id == dieTwo.Id)
+        else if (die.Id == dieTwo?.Id)
         {
             dieTwo = null;
             deallocatedDie = true;
-            debugMessages.Add("deallocating die two");
         }
         else if (dieOne == null)
         {
             dieOne = die;
-            debugMessages.Add("setting die one");
         }
         else
         {
             dieTwo = die;
-            debugMessages.Add("setting die twp");
         }
 
         if (deallocatedDie && store.CurrentRound.Share != null)
         {
-            debugMessages.Add("returning share");
             sharesService.ReturnShare();
         }
 
         if (dieOne != null && dieTwo != null)
         {
-            debugMessages.Add("getting share options");
             availableShares = sharesService.GetShareOptions(dieOne, dieTwo);
         }
 
         StateHasChanged();
+        RefreshChildren();
     }
 
     void BuyShare(Share share)
     {
         sharesService.BuyShare(share);
+        availableShares.RemoveAll(x => x != null);
+        StateHasChanged();
+        RefreshChildren();
+    }
 
+    void RefreshChildren()
+    {
+        // TODO: Get rid of these manual refresh calls.
+        squareRailSharesComponent.Refresh();
+        circleLineSharesComponent.Refresh();
+        pentagonExpressSharesComponent.Refresh();
     }
 }

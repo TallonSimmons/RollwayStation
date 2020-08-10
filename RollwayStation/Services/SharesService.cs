@@ -1,10 +1,7 @@
-﻿using RollwayStation.Components;
-using RollwayStation.Models;
+﻿using RollwayStation.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 
 namespace RollwayStation.Services
 {
@@ -25,7 +22,7 @@ namespace RollwayStation.Services
                 throw new NullReferenceException();
             }
 
-            var diceOrderedByFaceValue = new List<Die> { dieOne, dieTwo }.OrderBy(x => x.Face).ToList();
+            var diceOrderedByFaceValue = new List<Die> { dieOne, dieTwo }.OrderByDescending(x => x.Face).ToList();
             dieOne = diceOrderedByFaceValue[0];
             dieTwo = diceOrderedByFaceValue[1];
 
@@ -41,8 +38,9 @@ namespace RollwayStation.Services
             {
                 availablePurchaseTypes.Add(new Share(dieOne, dieTwo, CompanyType.CircleLine));
             }
+            var lastSquareRailShare = store.SquareRail.Shares.LastOrDefault();
             if (diceDifferential > 0
-                && store.SquareRail.Shares?.LastOrDefault()?.DiceDifferential < diceDifferential
+                && (lastSquareRailShare?.DiceDifferential < diceDifferential || lastSquareRailShare == null)
                 && store.SquareRail.SharesAvailable)
             {
                 availablePurchaseTypes.Add(new Share(dieOne, dieTwo, CompanyType.SquareRail));

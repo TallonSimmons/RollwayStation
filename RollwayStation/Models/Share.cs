@@ -13,7 +13,7 @@ namespace RollwayStation.Models
                 throw new NullReferenceException();
             }
 
-            var diceOrderedByValue = new List<Die> { dieOne, dieTwo }.OrderBy(x => x.Face).ToList();
+            var diceOrderedByValue = new List<Die> { dieOne, dieTwo }.OrderByDescending(x => x.Face).ToList();
             DieOne = diceOrderedByValue[0];
             DieTwo = diceOrderedByValue[1];
             CompanyType = companyType;

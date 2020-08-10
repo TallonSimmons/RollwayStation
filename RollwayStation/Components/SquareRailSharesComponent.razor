@@ -9,3 +9,9 @@
         <input type="text" class="col-2 text-center" disabled value="@(share?.DiceDifferential)" />
     }
 </div>
+@code {
+    public void Refresh()
+    {
+        StateHasChanged();
+    }
+}
