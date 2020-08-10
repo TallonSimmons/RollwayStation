@@ -1,0 +1,80 @@
+﻿@inject SharesService sharesService
+@inject Store store
+
+<Dice AllocationType="AllocationType.Share"
+      MaxAllocations="2"
+      OnAllocatedEventHandler="OnDieAllocated"></Dice>
+@foreach (var debugMessage in debugMessages)
+{
+    @debugMessage
+}
+<div class="bg-green rounded col-xs-12 col-md-6 mx-auto p-3">
+    <SquareRailSharesComponent></SquareRailSharesComponent>
+    <CircleLineSharesComponent></CircleLineSharesComponent>
+    <PentagonExpressSharesComponent></PentagonExpressSharesComponent>
+    @if (availableShares.Any())
+    {
+        <div class="btn-group mx-auto mt-2">
+            @foreach (var availableShare in availableShares)
+            {
+                <button class="btn bg-cream" @onclick="() => BuyShare(availableShare)">
+                    @availableShare.CompanyType.CompanyAcronym()
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Share> availableShares = new List<Share>();
+    private Die dieOne;
+    private Die dieTwo;
+    private List<string> debugMessages = new List<string>();
+
+    void OnDieAllocated(Die die)
+    {
+        var deallocatedDie = false;
+        if (die.Id == dieOne.Id)
+        {
+            dieOne = null;
+            deallocatedDie = true;
+            debugMessages.Add("deallocating die one");
+        }
+        else if (die.Id == dieTwo.Id)
+        {
+            dieTwo = null;
+            deallocatedDie = true;
+            debugMessages.Add("deallocating die two");
+        }
+        else if (dieOne == null)
+        {
+            dieOne = die;
+            debugMessages.Add("setting die one");
+        }
+        else
+        {
+            dieTwo = die;
+            debugMessages.Add("setting die twp");
+        }
+
+        if (deallocatedDie && store.CurrentRound.Share != null)
+        {
+            debugMessages.Add("returning share");
+            sharesService.ReturnShare();
+        }
+
+        if (dieOne != null && dieTwo != null)
+        {
+            debugMessages.Add("getting share options");
+            availableShares = sharesService.GetShareOptions(dieOne, dieTwo);
+        }
+
+        StateHasChanged();
+    }
+
+    void BuyShare(Share share)
+    {
+        sharesService.BuyShare(share);
+
+    }
+}

@@ -49,7 +49,7 @@ namespace RollwayStation.Models
                 return 0;
             }
 
-            return (stations + (Dots * 2) + (Triangles * 3) + (Stars * 5)) * train.OwningCompany.Shares;
+            return (stations + (Dots * 2) + (Triangles * 3) + (Stars * 5)) * train.OwningCompany.NumberOfSharesOwned;
         }
     }
 }

@@ -16,9 +16,9 @@ namespace RollwayStation.Tests
                 new Die {Face = 6},
             };
 
-            var train = new Train(2);
+            var train = new Train(3);
 
-            var auction = new Auction(train, 3);
+            var auction = new Auction(train, new List<int> { 2, 3, 4 });
 
             foreach (var die in dice)
             {
@@ -38,16 +38,15 @@ namespace RollwayStation.Tests
             var dice = new List<Die>
             {
                 new Die {Face = 2},
-                new Die {Face = 4},
                 new Die {Face = 6},
                 new Die {Face = 6},
+                new Die {Face = 2},
                 new Die {Face = 4},
-                new Die {Face = 2}
             };
 
-            var train = new Train(2);
+            var train = new Train(6);
 
-            var auction = new Auction(train, 6);
+            var auction = new Auction(train, new List<int> { 11, 12, 13, 14, 15 });
 
             foreach (var die in dice)
             {

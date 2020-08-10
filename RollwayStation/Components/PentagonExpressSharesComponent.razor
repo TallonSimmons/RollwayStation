@@ -1,0 +1,11 @@
+﻿@inject Store store
+<div class="form-inline">
+    <p class="text-light mr-1 @(CssHelper.GetCssCalcString(4,4))">
+        @store.PentagonExpress.CompanyType.CompanyAcronym()
+    </p>
+    @for (int i = 0; i < 5; i++)
+    {
+        store.PentagonExpress.Shares.TryGetElementAtIndex(i, out var share);
+        <input type="text" class="col-2 text-center" disabled value="@(share?.DiceDifferential)" />
+    }
+</div>

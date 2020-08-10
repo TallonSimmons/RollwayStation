@@ -6,8 +6,6 @@ namespace RollwayStation.Models
     public enum CompanyType { SquareRail, CircleLine, PentagonExpress }
     public class Company
     {
-        private int shares;
-
         public Company(CompanyType companyType)
         {
             CompanyType = companyType;
@@ -15,12 +13,9 @@ namespace RollwayStation.Models
 
         public CompanyType CompanyType { get; }
         public List<Train> Trains { get; } = new List<Train>();
-        public int Shares
-        {
-            get => shares;
-            set => shares = value >= 0 && value <= 5 ? value : shares;
-        }
-        public bool SharesAvailable => Shares < 5;
+        public List<Share> Shares { get; } = new List<Share>();
+        public int NumberOfSharesOwned => Shares.Count;
+        public bool SharesAvailable => NumberOfSharesOwned < 5;
         public string Name
         {
             get
