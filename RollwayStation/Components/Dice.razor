@@ -42,6 +42,7 @@
         { AllocationType.Share, "fa-percentage" },
         { AllocationType.Track, "fa-project-diagram" },
         { AllocationType.Bid, "fa-hand-holding-usd" },
+        {AllocationType.Hex, "fa-dice" }
     };
 
     protected override void OnInitialized()
@@ -72,7 +73,7 @@
 
     void SetAllocation(Die die)
     {
-        if (!anyAllocationsRemaining && die.AllocatedTo != AllocationType) 
+        if (!anyAllocationsRemaining && die.AllocatedTo != AllocationType)
         {
             return;
         }
@@ -86,6 +87,21 @@
         {
             die.AllocatedTo = AllocationType;
             currentAllocations++;
+        }
+
+        var oneDieLeft = (dice.Count(x => x.Used) == 4);
+        if (oneDieLeft && dice.FirstOrDefault(x => x.AllocatedTo == AllocationType.Hex) == null)
+        {
+            var hexDie = dice.FirstOrDefault(x => !x.Used);
+            hexDie.AllocatedTo = AllocationType.Hex;
+        }
+        else
+        {
+            var hexDie = dice.FirstOrDefault(x => x.AllocatedTo == AllocationType.Hex);
+            if(hexDie != null)
+            {
+                hexDie.AllocatedTo = null;
+            }
         }
         OnAllocatedEventHandler.InvokeAsync(die);
         StateHasChanged();

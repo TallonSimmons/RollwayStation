@@ -22,5 +22,12 @@ namespace RollwayStation
         {
             return store.Auctions;
         }
+
+
+        public void PlaceBid(Die die)
+        {
+            var auction = GetCurrentAuction();
+            auction.PlaceBid(die);
+        }
     }
 }

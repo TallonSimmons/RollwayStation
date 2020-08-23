@@ -62,6 +62,10 @@
         {
             availableShares = sharesService.GetShareOptions(dieOne, dieTwo);
         }
+        else
+        {
+            availableShares = new List<Share>();
+        }
 
         StateHasChanged();
         RefreshChildren();
