@@ -30,10 +30,5 @@ namespace RollwayStation.Models
 
             Type = trackMap.FirstOrDefault(x => x.Key.Contains(die.Face)).Value;
         }
-
-        public void PullUpTrack()
-        {
-            Type = null;
-        }
     }
 }

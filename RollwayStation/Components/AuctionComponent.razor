@@ -30,11 +30,11 @@
     {
         if (die.AllocatedTo == null)
         {
-            currentAuction.WithdrawBid();
+            auctionService.WithdrawBid();
         }
         else
         {
-            currentAuction.PlaceBid(die);
+            auctionService.PlaceBid(die);
         }
         StateHasChanged();
     }

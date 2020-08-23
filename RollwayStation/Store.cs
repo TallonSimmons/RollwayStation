@@ -33,9 +33,12 @@ namespace RollwayStation
             new Company(CompanyType.PentagonExpress),
         };
 
-        public List<GameRound> Rounds { get; set; } = new List<GameRound>();
+        public List<GameRound> Rounds { get; set; } = new List<GameRound> 
+        {
+            new GameRound(1)
+        };
         public GameRound CurrentRound => Rounds.LastOrDefault();
-        public int BiddingRound { get; set; } = 1;
+        public int Round => Rounds.Count();
         public Company SquareRail => Companies.FirstOrDefault(x => x.CompanyType == CompanyType.SquareRail);
         public Company CircleLine => Companies.FirstOrDefault(x => x.CompanyType == CompanyType.CircleLine);
         public Company PentagonExpress => Companies.FirstOrDefault(x => x.CompanyType == CompanyType.PentagonExpress);

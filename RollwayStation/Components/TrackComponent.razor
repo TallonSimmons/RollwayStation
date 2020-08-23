@@ -1,4 +1,5 @@
 ﻿@inject Store store;
+@inject TrackService trackService;
 
 <Dice AllocationType="AllocationType.Track"
       MaxAllocations="1"
@@ -7,13 +8,14 @@
     <h2 class="mb-2 text-light">Track</h2>
     @foreach (var trackImage in trackImageMap)
     {
-<div class="form-inline">
-    <img src="@trackImage.Value" style="height: 4vh;" />
-    <input type="checkbox" class="form-control-sm ml-3" style="transform: scale(2); -webkit-transform: scale(2);" checked="@(track.Type == trackImage.Key)" disabled />
-</div>
+        <div class="form-inline">
+            <img src="@trackImage.Value" style="height: 4vh;" />
+            <input type="checkbox" class="form-control-sm ml-3" style="transform: scale(2); -webkit-transform: scale(2);" checked="@(track?.Type == trackImage.Key)" disabled />
+        </div>
     }
 </div>
 @code {
+    Track track => store.CurrentRound.TrackLaid;
     bool assigningHex;
     readonly Dictionary<TrackType, string> trackImageMap = new Dictionary<TrackType, string>
 {
@@ -21,17 +23,16 @@
         {TrackType.Curve, "images/wide-curve-track.png"},
         {TrackType.TightCurve, "images/tight-curve-track.png"},
     };
-    Track track = new Track();
 
     void OnDieAllocated(Die die)
     {
         if (die.AllocatedTo == null)
         {
-            track.PullUpTrack();
+            trackService.PickUpTrack();
         }
         else
         {
-            track.LayTrack(die);
+            trackService.LayTrack(die);
         }
 
         StateHasChanged();

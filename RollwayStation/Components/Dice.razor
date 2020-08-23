@@ -67,7 +67,7 @@
             die.AllocatedTo = null;
         }
 
-        store.Rounds.Add(new GameRound());
+        store.Rounds.Add(new GameRound(store.CurrentRound.RoundNumber + 1));
         StateHasChanged();
     }
 

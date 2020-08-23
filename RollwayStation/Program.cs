@@ -19,7 +19,8 @@ namespace RollwayStation
             builder.Services
                 .AddSingleton<Store>()
                 .AddSingleton<AuctionService>()
-                .AddSingleton<SharesService>();
+                .AddSingleton<SharesService>()
+                .AddSingleton<TrackService>();
             await builder.Build().RunAsync();
         }
     }

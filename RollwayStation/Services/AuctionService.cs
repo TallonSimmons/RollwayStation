@@ -15,7 +15,7 @@ namespace RollwayStation
 
         public Auction GetCurrentAuction()
         {
-            return store.Auctions.FirstOrDefault(x => x.BiddingRounds.Contains(store.BiddingRound));
+            return store.Auctions.FirstOrDefault(x => x.BiddingRounds.Contains(store.Round));
         }
 
         public List<Auction> GetAuctions()
@@ -23,11 +23,17 @@ namespace RollwayStation
             return store.Auctions;
         }
 
-
         public void PlaceBid(Die die)
         {
             var auction = GetCurrentAuction();
             auction.PlaceBid(die);
+            store.CurrentRound.Auction = auction;
+        }
+
+        public void WithdrawBid()
+        {
+            GetCurrentAuction().WithdrawBid();
+            store.CurrentRound.Auction = null;
         }
     }
 }
