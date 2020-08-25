@@ -19,9 +19,17 @@ namespace RollwayStation.Models
             CompanyType = companyType;
         }
 
+        public Share(CompanyType companyType)
+        {
+            CompanyType = companyType;
+            Burned = true;
+        }
+
         public Die DieOne { get; }
         public Die DieTwo { get; }
         public CompanyType CompanyType { get; }
+        public bool Burned { get; }
+
         public int DiceTotal => DieOne.Face + DieTwo.Face;
         public int DiceDifferential => DieOne.Face - DieTwo.Face;
     }

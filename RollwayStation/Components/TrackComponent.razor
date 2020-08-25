@@ -1,9 +1,9 @@
 ﻿@inject Store store;
 @inject TrackService trackService;
 
-<Dice AllocationType="AllocationType.Track"
+<DiceComponent AllocationType="AllocationType.Track"
       MaxAllocations="1"
-      OnAllocatedEventHandler="OnDieAllocated"></Dice>
+      OnAllocatedEventHandler="OnDieAllocated"></DiceComponent>
 <div class="bg-green rounded col-xs-12 col-md-6 mx-auto p-3 text-center">
     <h2 class="mb-2 text-light">Track</h2>
     @foreach (var trackImage in trackImageMap)
@@ -16,7 +16,6 @@
 </div>
 @code {
     Track track => store.CurrentRound.TrackLaid;
-    bool assigningHex;
     readonly Dictionary<TrackType, string> trackImageMap = new Dictionary<TrackType, string>
 {
         {TrackType.Straight, "images/straight-track.png"},

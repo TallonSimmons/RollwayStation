@@ -10,7 +10,7 @@ namespace RollwayStation.Extensions
         public static bool TryGetElementAtIndex<T>(this List<T> list, int index, out T element)
             where T : class
         {
-            if(list == null)
+            if (list == null)
             {
                 throw new NullReferenceException();
             }
@@ -20,7 +20,7 @@ namespace RollwayStation.Extensions
             var listAsDictionary = list.ToDictionary(x => list.IndexOf(x));
 
             return listAsDictionary.TryGetValue(index, out element);
-            
+
         }
     }
 }

@@ -6,10 +6,6 @@ namespace RollwayStation.Models
     public class Die
     {
         private static readonly Random random = new Random();
-        public Die()
-        {
-            Id = Guid.NewGuid();
-        }
 
         private int face;
         public int Face
@@ -17,7 +13,7 @@ namespace RollwayStation.Models
             get => face;
             set => face = value >= 1 && value <= 6 ? value : throw new ArgumentOutOfRangeException();
         }
-        public Guid Id { get; }
+        public Guid Id { get; set; }
         public AllocationType? AllocatedTo { get; set; }
         public bool Used => AllocatedTo != null;
 

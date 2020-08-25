@@ -11,6 +11,9 @@
         public Share Share { get; set; }
         public Track TrackLaid { get; set; }
         public Die HexDie { get; set; }
+        public Die ShareDieOne { get; set; }
+        public Die ShareDieTwo { get; set; }
+        public IEngineer Engineer { get; set; }
         public int RoundNumber { get; }
         public bool Completed => Auction != null && Share != null && HexDie != null;
         public bool IsOperatingRound =>

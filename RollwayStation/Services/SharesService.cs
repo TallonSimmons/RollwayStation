@@ -73,5 +73,14 @@ namespace RollwayStation.Services
             store.CurrentRound.Share = null;
             lastAddedShare = null;
         }
+
+        public void BurnShare(CompanyType companyType)
+        {
+            var targetCompany = store.Companies.FirstOrDefault(company => company.CompanyType == companyType);
+            var burnedShare = new Share(companyType);
+            targetCompany.Shares.Add(burnedShare);
+            store.CurrentRound.Share = burnedShare;
+            lastAddedShare = burnedShare;
+        }
     }
 }

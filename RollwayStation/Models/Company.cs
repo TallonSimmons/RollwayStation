@@ -20,17 +20,13 @@ namespace RollwayStation.Models
         {
             get
             {
-                switch (CompanyType)
+                return CompanyType switch
                 {
-                    case CompanyType.SquareRail:
-                        return "Square Rail";
-                    case CompanyType.CircleLine:
-                        return "Circle Line";
-                    case CompanyType.PentagonExpress:
-                        return "Pentagon Express";
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                    CompanyType.SquareRail => "Square Rail",
+                    CompanyType.CircleLine => "Circle Line",
+                    CompanyType.PentagonExpress => "Pentagon Express",
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
             }
         }
     }

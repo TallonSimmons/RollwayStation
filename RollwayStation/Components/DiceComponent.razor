@@ -38,7 +38,7 @@
     private int currentAllocations;
     private bool anyAllocationsRemaining => currentAllocations < MaxAllocations;
     private readonly Dictionary<AllocationType, string> allocationIconMap = new Dictionary<AllocationType, string>
-{
+    {
         { AllocationType.Share, "fa-percentage" },
         { AllocationType.Track, "fa-project-diagram" },
         { AllocationType.Bid, "fa-hand-holding-usd" },
@@ -67,7 +67,7 @@
             die.AllocatedTo = null;
         }
 
-        store.Rounds.Add(new GameRound(store.CurrentRound.RoundNumber + 1));
+        store.Rounds.Add(new GameRound(store.Round + 1));
         StateHasChanged();
     }
 
@@ -94,13 +94,15 @@
         {
             var hexDie = dice.FirstOrDefault(x => !x.Used);
             hexDie.AllocatedTo = AllocationType.Hex;
+            store.CurrentRound.HexDie = hexDie;
         }
         else
         {
             var hexDie = dice.FirstOrDefault(x => x.AllocatedTo == AllocationType.Hex);
-            if(hexDie != null)
+            if (hexDie != null)
             {
                 hexDie.AllocatedTo = null;
+                store.CurrentRound.HexDie = null;
             }
         }
         OnAllocatedEventHandler.InvokeAsync(die);

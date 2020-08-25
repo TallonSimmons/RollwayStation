@@ -6,7 +6,7 @@
     @for (int i = 0; i < 5; i++)
     {
         store.PentagonExpress.Shares.TryGetElementAtIndex(i, out var share);
-        <input type="text" class="col-2 text-center" disabled value="@(share?.DiceTotal)" />
+        <input type="text" class="col-2 text-center" disabled value="@(share?.Burned ?? false ? "X" : share?.DiceTotal.ToString())" />
     }
 </div>
 @code {

@@ -10,11 +10,11 @@ namespace RollwayStation
     {
         public readonly List<Die> Dice = new List<Die>
         {
-            new Die(),
-            new Die(),
-            new Die(),
-            new Die(),
-            new Die(),
+            new Die() { Id = Guid.NewGuid() },
+            new Die() { Id = Guid.NewGuid() },
+            new Die() { Id = Guid.NewGuid() },
+            new Die() { Id = Guid.NewGuid() },
+            new Die() { Id = Guid.NewGuid() },
         };
 
         public readonly List<Auction> Auctions = new List<Auction>
@@ -33,10 +33,7 @@ namespace RollwayStation
             new Company(CompanyType.PentagonExpress),
         };
 
-        public List<GameRound> Rounds { get; set; } = new List<GameRound> 
-        {
-            new GameRound(1)
-        };
+        public List<GameRound> Rounds { get; set; } = new List<GameRound>();
         public GameRound CurrentRound => Rounds.LastOrDefault();
         public int Round => Rounds.Count();
         public Company SquareRail => Companies.FirstOrDefault(x => x.CompanyType == CompanyType.SquareRail);

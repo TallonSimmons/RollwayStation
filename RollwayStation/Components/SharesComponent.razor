@@ -1,9 +1,9 @@
-﻿@inject SharesService sharesService
-@inject Store store
+﻿@inject SharesService sharesService;
+@inject Store store;
 
-<Dice AllocationType="AllocationType.Share"
+<DiceComponent AllocationType="AllocationType.Share"
       MaxAllocations="2"
-      OnAllocatedEventHandler="OnDieAllocated"></Dice>
+      OnAllocatedEventHandler="OnDieAllocated"></DiceComponent>
 <div class="bg-green rounded col-xs-12 col-md-6 mx-auto p-3">
     <h2 class="mb-2 text-light">Shares</h2>
     <SquareRailSharesComponent @ref="squareRailSharesComponent"></SquareRailSharesComponent>
@@ -21,6 +21,15 @@
             }
         </div>
     }
+    else if (BothDiceAllocated && !availableShares.Any() && store.CurrentRound.Share == null)
+    {
+        <h4 class="mt-2">Burn a Share</h4>
+        <div class="btn-group">
+            <button class="btn bg-cream" @onclick="() => BurnShare(CompanyType.SquareRail)">SR</button>
+            <button class="btn bg-cream" @onclick="() => BurnShare(CompanyType.CircleLine)">CL</button>
+            <button class="btn bg-cream" @onclick="() => BurnShare(CompanyType.PentagonExpress)">PE</button>
+        </div>
+    }
 </div>
 
 @code {
@@ -28,29 +37,28 @@
     private CircleLineSharesComponent circleLineSharesComponent;
     private PentagonExpressSharesComponent pentagonExpressSharesComponent;
     private List<Share> availableShares = new List<Share>();
-    private Die dieOne;
-    private Die dieTwo;
+    private bool BothDiceAllocated => store.CurrentRound?.ShareDieOne != null && store.CurrentRound?.ShareDieTwo != null;
 
     void OnDieAllocated(Die die)
     {
         var deallocatedDie = false;
-        if (die.Id == dieOne?.Id)
+        if (die.Id == store.CurrentRound.ShareDieOne?.Id)
         {
-            dieOne = null;
+            store.CurrentRound.ShareDieOne = null;
             deallocatedDie = true;
         }
-        else if (die.Id == dieTwo?.Id)
+        else if (die.Id == store.CurrentRound.ShareDieTwo?.Id)
         {
-            dieTwo = null;
+            store.CurrentRound.ShareDieTwo = null;
             deallocatedDie = true;
         }
-        else if (dieOne == null)
+        else if (store.CurrentRound.ShareDieOne == null)
         {
-            dieOne = die;
+            store.CurrentRound.ShareDieOne = die.Copy();
         }
         else
         {
-            dieTwo = die;
+            store.CurrentRound.ShareDieTwo = die.Copy();
         }
 
         if (deallocatedDie && store.CurrentRound.Share != null)
@@ -58,9 +66,9 @@
             sharesService.ReturnShare();
         }
 
-        if (dieOne != null && dieTwo != null)
+        if (store.CurrentRound.ShareDieOne != null && store.CurrentRound.ShareDieTwo != null)
         {
-            availableShares = sharesService.GetShareOptions(dieOne, dieTwo);
+            availableShares = sharesService.GetShareOptions(store.CurrentRound.ShareDieOne, store.CurrentRound.ShareDieTwo);
         }
         else
         {
@@ -75,6 +83,13 @@
     {
         sharesService.BuyShare(share);
         availableShares.RemoveAll(x => x != null);
+        StateHasChanged();
+        RefreshChildren();
+    }
+
+    void BurnShare(CompanyType companyType)
+    {
+        sharesService.BurnShare(companyType);
         StateHasChanged();
         RefreshChildren();
     }
